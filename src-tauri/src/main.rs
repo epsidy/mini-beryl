@@ -30,7 +30,7 @@ async fn scan_sensors() -> Vec<String> {
         let ports = ports
             .into_iter()
             .filter(|port| match port.port_type {
-                UsbPort(..) => port.port_name.starts_with("/dev/tty"),
+                UsbPort(..) => !port.port_name.starts_with("/dev/cu"),
                 _ => false
             })
             .collect::<Vec<SerialPortInfo>>();
