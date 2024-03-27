@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="./src-tauri/icons/icon.png" alt="mini-beryl"/>
+    <img src="./src-tauri/icons/Square310x310Logo.png" alt="mini-beryl"/>
 </p>
 
 # Mini-beryl
