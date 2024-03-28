@@ -4,12 +4,12 @@
             <div class="card-body break-words overflow-hidden">
                 <div class="card-title">Data</div>
                 <div class="h-full overflow-y-scroll">
-                    <code>
-                        {{ text }}
+                    <code v-for="(v,i) in text" :key="i">
+                        {{ v }}
                     </code>
                 </div>
                 <div class="card-actions justify-end">
-                    <button class="btn btn-success" @click="text = ''">Clear</button>
+                    <button class="btn btn-success" @click="text.length = 0">Clear</button>
                 </div>
             </div>
         </div>
@@ -34,7 +34,7 @@ import {useRouter} from "vue-router";
 const router = useRouter()
 
 let unListenFn: UnlistenFn
-const text = ref('')
+const text = ref<string[]>([])
 const startEventListener = async () => {
     unListenFn = await listen('hall', (event: any) => {
         text.value += event.payload
@@ -49,9 +49,12 @@ const onCloseClick = async () => {
 
 
 onMounted(async () => {
-    const query = router.currentRoute.value.query as SensorMode
-    await startEventListener()
-    await start_hall_mode({payload: query})
+    setInterval(() => {
+        text.value.push("hello")
+    }, 1)
+    // const query = router.currentRoute.value.query as SensorMode
+    // await startEventListener()
+    // await start_hall_mode({payload: query})
 })
 </script>
 
