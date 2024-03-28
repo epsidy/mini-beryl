@@ -11,7 +11,7 @@ use crate::utils::processing::bytes_to_physical_normal;
 
 const REFRESH_SIZE: usize = 10;
 
-pub fn sensor_task(
+pub fn ecg_task(
     mut sensor: Box<dyn SerialPort>,
     sender: Sender<Vec<f32>>,
     running: Arc<AtomicBool>,
@@ -82,7 +82,7 @@ pub fn data_aggregation_process(
                     .chunks(500)
                     .map(|chunk| chunk.to_vec())
                     .collect::<Vec<Vec<f32>>>();
-                app.emit_all("sensor", data).unwrap();
+                app.emit_all("ecg", data).unwrap();
             }
             Err(_) => break
         };

@@ -1559,6 +1559,7 @@ version = "0.0.1"
 dependencies = [
  "crossbeam-channel",
  "crossbeam-utils",
+ "hex",
  "serde",
  "serde_json",
  "serialport",

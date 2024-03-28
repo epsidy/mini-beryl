@@ -3,10 +3,8 @@
         <div class="hero-overlay bg-opacity-35"></div>
         <div class="hero-content text-center">
             <div class="max-w-md">
-                <div class="flex items-center" v-if="loading">
-                    <div class="skeleton w-80 h-12 m-3.5"></div>
-                </div>
-                <div class="flex items-center" v-else>
+                <div class="skeleton w-80 h-12 m-3.5" v-if="loading"></div>
+                <div v-else>
                     <select class="select select-primary select-md m-3.5" v-model="selected">
                         <option disabled value="">Select a DS sensor!</option>
                         <option v-for="(v,i) in sensors" :key="i"> {{ v }}</option>
@@ -21,9 +19,10 @@
                 >
                     Normal
                 </button>
-                <button class="btn m-3 btn-secondary shadow-xl disabled:text-gray-300"
-                        :disabled="true"
-                        @click="router.replace({path: '/chart', query: {sensor: selected, mode: 'hall'}})"
+                <button
+                    class="btn m-3 btn-secondary shadow-xl disabled:text-gray-300"
+                    :disabled="selected.length === 0"
+                    @click="router.replace({path: '/hall', query: {sensor: selected, mode: 'hall'}})"
                 >
                     Hall Effect
                 </button>
