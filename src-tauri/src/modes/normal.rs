@@ -27,6 +27,10 @@ pub fn ecg_task(
 
     if let Err(_) = sensor.read_exact(&mut package) {
         sensor.write(&[DModuleCommand::EcgPowOff as u8]).unwrap_or(0);
+        for i in 0..20 {
+            println!("{:08b}", &package[i]);
+        }
+        println!("--------");
         return;
     }
 

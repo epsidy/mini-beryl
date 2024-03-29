@@ -21,7 +21,7 @@
 import {useRouter} from "vue-router";
 import {listen, UnlistenFn} from '@tauri-apps/api/event'
 import {onMounted, ref} from "vue";
-import {start_normal_mode} from "../invokes.ts";
+import {startNormalMode} from "../invokes.ts";
 import {stop} from "../invokes.ts";
 import VChart from 'vue-echarts';
 import * as echarts from 'echarts/core';
@@ -73,7 +73,7 @@ const onCloseClick = async () => {
 }
 
 const startEventListener = async () => {
-    unListenFn = await listen('hall', (event: any) => {
+    unListenFn = await listen('ecg', (event: any) => {
         renderData(event.payload)
     });
 }
@@ -84,7 +84,7 @@ onMounted(async () => {
     const rows = query.mode === 'normal' ? 3 : 5
     const titles = Array.from({length: rows}, (_, i) => `lead${i + 1} DS#${query.sensor}`)
     chart.value?.setOption(sensorChartInit(titles, rows, 1))
-    await start_normal_mode({payload: query})
+    await startNormalMode({payload: query})
     await startEventListener()
 })
 
