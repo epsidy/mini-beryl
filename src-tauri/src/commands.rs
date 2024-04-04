@@ -45,7 +45,7 @@ pub async fn scan_sensors() -> Vec<String> {
 
 #[tauri::command]
 pub fn start_normal_mode(payload: SensorMode, app: tauri::AppHandle, running: tauri::State<Arc<AtomicBool>>) -> bool {
-    running.inner().store(true, Ordering::Relaxed);
+    running.inner().store(true, Ordering::Release);
 
     return match serialport::new(&payload.sensor, 3_000_000).timeout(Duration::from_millis(500)).open() {
         Ok(port) => {
@@ -69,7 +69,7 @@ pub fn stop(
     running: tauri::State<Arc<AtomicBool>>,
     open_port: tauri::State<Mutex<Option<Box<dyn SerialPort>>>>
 ) {
-    running.store(false, Ordering::Relaxed);
+    running.store(false, Ordering::Release);
     let mut open_port_state = open_port.inner().lock().unwrap();
     *open_port_state = None;
 }
@@ -82,8 +82,8 @@ pub fn start_hall_mode(
     running: tauri::State<Arc<AtomicBool>>,
     open_port: tauri::State<Mutex<Option<Box<dyn SerialPort>>>>,
 ) -> bool {
-    running.inner().store(true, Ordering::Relaxed);
-    return match serialport::new(&payload.sensor, 3_000_000).timeout(Duration::from_millis(500)).open() {
+    running.inner().store(true, Ordering::Release);
+    return match serialport::new(&payload.sensor, 3_000_000).timeout(Duration::from_secs(1)).open() {
         Ok(port) => {
             let port_clone = port.try_clone().unwrap();
             let mut open_port_state = open_port.inner().lock().unwrap();
@@ -125,6 +125,7 @@ pub fn send_command(
         _ => 0x10
     };
     let mut open_port_state = open_port.inner().lock().unwrap();
+    println!("{}", command);
     match &mut *open_port_state {
         None => {}
         Some(port) => { port.write(&[command]).unwrap(); }

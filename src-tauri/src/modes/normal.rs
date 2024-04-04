@@ -27,10 +27,6 @@ pub fn ecg_task(
 
     if let Err(_) = sensor.read_exact(&mut package) {
         sensor.write(&[DModuleCommand::EcgPowOff as u8]).unwrap_or(0);
-        for i in 0..20 {
-            println!("{:08b}", &package[i]);
-        }
-        println!("--------");
         return;
     }
 
@@ -38,7 +34,7 @@ pub fn ecg_task(
 
     drop(wg);
 
-    while running.load(Ordering::Relaxed) {
+    while running.load(Ordering::Acquire) {
         match sensor.read_exact(&mut package) {
             Ok(_) => {
                 buffer.extend_from_slice(&package);
@@ -68,7 +64,7 @@ pub fn data_aggregation_process(
     let mut window_buffer = vec![f32::NAN; 500 * grid_nums];
     let mut current: usize = 0;
     wg.wait();
-    while running.load(Ordering::Relaxed) {
+    while running.load(Ordering::Acquire) {
         match receiver.recv_timeout(Duration::from_millis(160)) {
             Ok(new) => {
                 new.chunks(10).enumerate().for_each(|(i, lead)| {
@@ -91,7 +87,7 @@ pub fn data_aggregation_process(
             Err(_) => break
         };
     }
-    running.store(false, Ordering::Relaxed);
+    running.store(false, Ordering::Release);
 }
 
 
