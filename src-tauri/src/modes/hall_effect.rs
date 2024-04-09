@@ -1,4 +1,4 @@
-use std::{cmp, io};
+use std::cmp;
 use std::io::Read;
 use std::sync::Arc;
 use std::sync::atomic::{AtomicBool, Ordering};
@@ -8,8 +8,8 @@ use crossbeam_utils::sync::WaitGroup;
 use serialport::{ClearBuffer, SerialPort};
 use tauri::Manager;
 use crate::global::REFRESH_SIZE;
-use crate::utils::hardware::{clear_buffer, DModuleCommand};
-use crate::utils::processing::{bytes_to_physical_hall, bytes_to_physical_normal};
+use crate::utils::hardware::DModuleCommand;
+use crate::utils::processing::bytes_to_physical_hall;
 
 // pub fn hall_effect_task(
 //     mut sensor: Box<dyn SerialPort>,
@@ -76,12 +76,12 @@ pub fn hall_effect_task(
     sensor.set_timeout(Duration::from_millis(16)).unwrap_or(());
 
     drop(wg);
-
     while running.load(Ordering::Acquire) {
         match sensor.read_exact(&mut package) {
             Ok(_) => {
                 buffer.extend_from_slice(&package);
                 if buffer.len() == buffer_size {
+
                     let points = bytes_to_physical_hall(&buffer, REFRESH_SIZE);
                     if let Err(_) = sender.try_send(points) {
                         break;

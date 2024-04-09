@@ -1,4 +1,3 @@
-use std::io::Write;
 use std::sync::{Arc, Mutex};
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::thread;

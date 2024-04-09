@@ -13,6 +13,10 @@ export const startHallMode = async (data: { payload: { sensor: string, mode: str
     return await invoke('start_hall_mode', data)
 }
 
+export const startHallEffectMode = async (data: { payload: { sensor: string, mode: string } }): Promise<string[]> => {
+    return await invoke('start_hall_effect_mode', data)
+}
+
 export const stop = async (): Promise<string[]> => {
     return await invoke('stop')
 }

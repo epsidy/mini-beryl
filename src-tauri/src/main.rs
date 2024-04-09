@@ -4,7 +4,7 @@
 use std::sync::{Arc, Mutex};
 use std::sync::atomic::AtomicBool;
 use serialport::SerialPort;
-use crate::commands::{scan_sensors, start_hall_mode, start_normal_mode, stop, send_command};
+use crate::commands::{scan_sensors, start_normal_mode, stop, start_hall_effect_mode};
 
 mod utils;
 mod modes;
@@ -21,9 +21,8 @@ fn main() {
         .invoke_handler(tauri::generate_handler![
             scan_sensors,
             start_normal_mode,
-            start_hall_mode,
+            start_hall_effect_mode,
             stop,
-            send_command
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
