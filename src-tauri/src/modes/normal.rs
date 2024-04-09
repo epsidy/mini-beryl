@@ -6,10 +6,10 @@ use crossbeam_channel::{Receiver, Sender};
 use crossbeam_utils::sync::WaitGroup;
 use serialport::SerialPort;
 use tauri::Manager;
+use crate::global::REFRESH_SIZE;
 use crate::utils::hardware::{clear_buffer, DModuleCommand};
 use crate::utils::processing::bytes_to_physical_normal;
 
-const REFRESH_SIZE: usize = 10;
 
 pub fn ecg_task(
     mut sensor: Box<dyn SerialPort>,

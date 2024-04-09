@@ -9,7 +9,7 @@ use crate::commands::{scan_sensors, start_hall_mode, start_normal_mode, stop, se
 mod utils;
 mod modes;
 mod commands;
-
+mod global;
 
 
 // Learn more about Tauri commands.rs at https://tauri.app/v1/guides/features/command

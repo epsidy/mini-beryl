@@ -120,3 +120,43 @@ pub fn bytes_to_physical_normal(raw_data: &[u8], package_nums: usize) -> Vec<f32
         .flatten()
         .collect::<Vec<f32>>()
 }
+
+
+pub fn bytes_to_physical_hall(raw_data: &[u8], package_nums: usize) -> Vec<f32> {
+    const LSB: f32 = 0.0051116943359375;
+    const OFFSET: f32 = 670.0;
+
+    let size = package_nums * 128;
+
+    let mut hall = vec![0.0f32; size * 3];
+
+    for (i, chunk) in raw_data.chunks(20).enumerate() {
+        let package = chunk[14..20];
+
+        let gx = (((package[0] & 0b00000001) as u16) << 11
+            | ((package[1] & 0b01111111) as u16) << 4
+            | (package[2] & 0b01111000) as u16) as f32 * LSB - OFFSET;
+
+
+        let gy = (((package[2] & 0b00000111) as u16) << 9
+            | ((package[3] & 0b01111111) as u16) << 2
+            | (package[4] & 0b01100000) as u16) as f32 * LSB - OFFSET;
+
+        let gz = (((package[4] & 0b00011111) as u16) << 7
+            | ((package[5] & 0b01111111) as u16) << 5) as f32 * LSB - OFFSET;
+
+        hall[i] = gx;
+        hall[i + size] = gy;
+        hall[i + size * 2] = gz;
+    }
+
+    hall
+        .chunks(size)
+        .map(|lead|
+            lead
+                .chunks(128)
+                .map(|chunk| chunk.iter().sum::<f32>() / 128f32)
+        )
+        .flatten()
+        .collect::<Vec<f32>>()
+}
