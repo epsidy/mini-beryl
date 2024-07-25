@@ -115,36 +115,3 @@ pub fn start_hall_effect_mode(payload: SensorMode, app: tauri::AppHandle, runnin
         Err(_) => false
     };
 }
-//
-// #[tauri::command]
-// pub fn send_command(
-//     payload: String,
-//     open_port: tauri::State<Mutex<Option<Box<dyn SerialPort>>>>,
-// ) {
-//     let command: u8 = match payload.as_str() {
-//         "CMD_InfoSystem" => 0x00,
-//         "CMD_ID" => 0x00,
-//         "CMD_UID" => 0x01,
-//         "CMD_SID" => 0x02,
-//         "CMD_HID" => 0x03,
-//         "CMD_ECG" => 0x10,
-//         "CMD_ECG_PWR_OFF" => 0x10,
-//         "CMD_ECG3_PWR_ON" => 0x11,
-//         "CMD_IMU" => 0x20,
-//         "CMD_IMU_PWR_OFF" => 0x20,
-//         "CMD_IMU_PWR_ON" => 0x21,
-//         "CMD_HALL" => 0x30,
-//         "CMD_HALL_PWR_OFF" => 0x30,
-//         "CMD_HALL_PWR_ON" => 0x31,
-//         "CMD_HALL_B0_PWR_OFF" => 0x32,
-//         "CMD_HALL_B0_PWR_ON" => 0x33,
-//         "CMD_HALL_GRD_PWR_OFF" => 0x34,
-//         "CMD_HALL_GRD_PWR_ON" => 0x35,
-//         _ => 0x10
-//     };
-//     let mut open_port_state = open_port.inner().lock().unwrap();
-//     match &mut *open_port_state {
-//         None => {}
-//         Some(port) => { port.write(&[command]).unwrap(); }
-//     };
-// }
