@@ -4,7 +4,7 @@
 
 # Mini-beryl
 
-Minimalist Beryl, allowing quick connection of the D moudle to view the DS Sensor's signal waveforms.
+Minimalist eazyG, allowing quick connection of the D moudle to view the DS Sensor's signal waveforms.
 
 # Technical Stack
 

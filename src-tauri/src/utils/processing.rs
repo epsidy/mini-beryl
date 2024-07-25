@@ -95,16 +95,24 @@ pub fn bytes_to_physical_normal(raw_data: &[u8], package_nums: usize) -> Vec<f32
 
     for (i, chunk) in raw_data.chunks(8).enumerate() {
         let value = u64::from_be_bytes(chunk.try_into().unwrap());
-        let e3_val = (((value >> 56) & 0x3F) << 12
+
+        let e1_val = (((value >> 56) & 0x3F) << 12
             | ((value >> 48) & 0x7F) << 5
-            | ((value >> 42) & 0x1F)) as f32 * LSB - OFFSET;
+            | ((value >> 42) & 0x1F)) as f32
+            * LSB
+            - OFFSET;
         let e2_val = (((value >> 40) & 0x3) << 16
             | ((value >> 32) & 0x7F) << 9
             | ((value >> 24) & 0x7F) << 2
-            | ((value >> 21) & 0x3)) as f32 * LSB - OFFSET;
-        let e1_val = (((value >> 16) & 0x1F) << 13
+            | ((value >> 21) & 0x3)) as f32
+            * LSB
+            - OFFSET;
+        let e3_val = (((value >> 16) & 0x1F) << 13
             | ((value >> 8) & 0x7F) << 6
-            | ((value >> 1) & 0x3F)) as f32 * LSB - OFFSET;
+            | ((value >> 1) & 0x3F)) as f32
+            * LSB
+            - OFFSET;
+
         physical[i] = e1_val;
         physical[i + size] = e2_val;
         physical[i + size * 2] = e3_val;
@@ -113,9 +121,9 @@ pub fn bytes_to_physical_normal(raw_data: &[u8], package_nums: usize) -> Vec<f32
     physical
         .chunks(size)
         .map(|lead|
-            lead
-                .chunks(128)
-                .map(|chunk| chunk.iter().sum::<f32>() / 128f32)
+        lead
+            .chunks(128)
+            .map(|chunk| chunk.iter().sum::<f32>() / 128f32)
         )
         .flatten()
         .collect::<Vec<f32>>()
@@ -152,9 +160,9 @@ pub fn bytes_to_physical_hall(raw_data: &[u8], package_nums: usize) -> Vec<f32> 
     hall
         .chunks(size)
         .map(|lead|
-            lead
-                .chunks(128)
-                .map(|chunk| chunk.iter().sum::<f32>() / 128f32)
+        lead
+            .chunks(128)
+            .map(|chunk| chunk.iter().sum::<f32>() / 128f32)
         )
         .flatten()
         .collect::<Vec<f32>>()
